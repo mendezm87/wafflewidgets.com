@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Dvy Account | Waffle Widgets</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 40px auto; padding: 20px; }
+        .card { border: 1px solid #eee; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        h1 { color: #d32f2f; }
+        .btn { display: inline-block; background: #d32f2f; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; margin-top: 20px; }
+        .instructions { background: #fdf2f2; padding: 15px; border-left: 4px solid #d32f2f; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Request Account Deletion</h1>
+        <p>If you would like to delete your <strong>Dvy</strong> account and all associated data (receipts, profile, and history), please follow the instructions below.</p>
+        
+        <div class="instructions">
+            <strong>Note:</strong> To comply with security standards, we must verify your identity. Deleting your account is permanent and cannot be undone.
+        </div>
+
+        <h3>Option 1: In the App (Fastest)</h3>
+        <p>Open Dvy > Profile > Settings > <strong>Delete My Account</strong>.</p>
+
+        <h3>Option 2: Via Email</h3>
+        <p>If you have already uninstalled the app, please email us from the email address associated with your account.</p>
+        
+        <a href="mailto:support@wafflewidgets.com?subject=Dvy%20Account%20Deletion%20Request&body=Please%20delete%20my%20Dvy%20account%20and%20all%20associated%20data.%20My%20account%20email%20is:%20" class="btn">
+            Send Deletion Request Email
+        </a>
+    </div>
+</body>
+</html>
