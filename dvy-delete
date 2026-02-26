@@ -27,7 +27,7 @@
         <h3>Option 2: Via Email</h3>
         <p>If you have already uninstalled the app, please email us from the email address associated with your account.</p>
         
-        <a href="mailto:support@wafflewidgets.com?subject=Dvy%20Account%20Deletion%20Request&body=Please%20delete%20my%20Dvy%20account%20and%20all%20associated%20data.%20My%20account%20email%20is:%20" class="btn">
+        <a href="mailto:wafflewidgets@gmail.com?subject=Dvy%20Account%20Deletion%20Request&body=Please%20delete%20my%20Dvy%20account%20and%20all%20associated%20data.%20My%20account%20email%20is:%20" class="btn">
             Send Deletion Request Email
         </a>
     </div>
