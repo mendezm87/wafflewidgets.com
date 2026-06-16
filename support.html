@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dvy | Support & Help Center</title>
+    <meta name="description" content="Get help, browse FAQs, or contact support for Dvy - the clean receipt scanning and bill splitting app.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+      :root {
+        --bg-color: #080c14;
+        --card-bg: rgba(17, 24, 39, 0.55);
+        --text-primary: #f3f4f6;
+        --text-secondary: #9ca3af;
+        --primary-glow: #8b5cf6;
+        --secondary-glow: #3b82f6;
+        --accent-glow: #d946ef;
+        --font-title: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-primary);
+        font-family: var(--font-body);
+        min-height: 100vh;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+
+      /* Animated Glowing Background Blobs */
+      .blob {
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        border-radius: 50%;
+        filter: blur(130px);
+        z-index: 0;
+        opacity: 0.18;
+        pointer-events: none;
+        animation: float 25s infinite alternate ease-in-out;
+      }
+
+      .blob-1 {
+        background: radial-gradient(circle, var(--primary-glow) 0%, var(--secondary-glow) 100%);
+        top: -10%;
+        left: -10%;
+      }
+
+      .blob-2 {
+        background: radial-gradient(circle, var(--accent-glow) 0%, var(--primary-glow) 100%);
+        bottom: -10%;
+        right: -10%;
+        animation-delay: -7s;
+      }
+
+      @keyframes float {
+        0% { transform: translate(0, 0) scale(1); }
+        50% { transform: translate(60px, 40px) scale(1.15); }
+        100% { transform: translate(-40px, -60px) scale(0.9); }
+      }
+
+      /* Navigation Header */
+      header {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 10;
+        position: relative;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+      }
+
+      .logo-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--primary-glow) 0%, var(--secondary-glow) 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-title);
+        font-weight: 800;
+        font-size: 1.5rem;
+        color: white;
+        box-shadow: 0 8px 16px rgba(139, 92, 246, 0.3);
+      }
+
+      .logo-text {
+        font-family: var(--font-title);
+        font-weight: 700;
+        font-size: 1.75rem;
+        letter-spacing: -0.05em;
+        background: linear-gradient(135deg, #ffffff 0%, #d1d5db 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      /* Main Container */
+      main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem 1.5rem 4rem;
+        z-index: 10;
+        position: relative;
+        max-width: 800px;
+        width: 100%;
+        margin: 0 auto;
+      }
+
+      /* Glassmorphic Card Container */
+      .card {
+        background: var(--card-bg);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 28px;
+        padding: 3rem 2.5rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        width: 100%;
+        margin-bottom: 2rem;
+        transition: border-color 0.4s ease;
+      }
+
+      .card:hover {
+        border-color: rgba(139, 92, 246, 0.25);
+      }
+
+      /* Headings & Texts */
+      h1 {
+        font-family: var(--font-title);
+        font-weight: 800;
+        font-size: 2.5rem;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.02em;
+        background: linear-gradient(to right, #ffffff, #e5e7eb);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-align: center;
+      }
+
+      .subtitle {
+        color: var(--text-secondary);
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 2.5rem;
+        text-align: center;
+      }
+
+      h2 {
+        font-family: var(--font-title);
+        font-weight: 700;
+        font-size: 1.75rem;
+        margin-bottom: 1.5rem;
+        color: #ffffff;
+        letter-spacing: -0.01em;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding-bottom: 0.5rem;
+      }
+
+      /* Support Contact Section */
+      .support-cta {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .support-cta::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.1), transparent 60%);
+        pointer-events: none;
+      }
+
+      .support-cta-title {
+        font-family: var(--font-title);
+        font-size: 1.35rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: white;
+      }
+
+      .support-cta-desc {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.5;
+        max-width: 500px;
+        margin-bottom: 1.5rem;
+      }
+
+      .btn-support {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 0.9rem 2rem;
+        border-radius: 14px;
+        text-decoration: none;
+        color: white;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, var(--primary-glow) 0%, var(--secondary-glow) 100%);
+        border: none;
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
+        cursor: pointer;
+      }
+
+      .btn-support:hover {
+        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        transform: translateY(-2px);
+      }
+
+      /* FAQs Accordion Styles */
+      .faq-group {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      details {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        overflow: hidden;
+        transition: border-color 0.3s ease, background-color 0.3s ease;
+      }
+
+      details[open] {
+        border-color: rgba(139, 92, 246, 0.25);
+        background: rgba(255, 255, 255, 0.03);
+      }
+
+      summary {
+        padding: 1.25rem 1.5rem;
+        font-family: var(--font-title);
+        font-weight: 600;
+        font-size: 1.1rem;
+        color: #ffffff;
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+      }
+
+      /* Custom expand arrow */
+      summary::after {
+        content: '';
+        width: 8px;
+        height: 8px;
+        border-right: 2px solid var(--text-secondary);
+        border-bottom: 2px solid var(--text-secondary);
+        transform: rotate(45deg);
+        transition: transform 0.3s ease, border-color 0.3s ease;
+        margin-left: 1rem;
+        flex-shrink: 0;
+      }
+
+      details[open] summary::after {
+        transform: rotate(-135deg);
+        border-color: #c084fc;
+      }
+
+      summary:hover {
+        color: #c084fc;
+      }
+
+      summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .faq-answer {
+        padding: 0 1.5rem 1.5rem 1.5rem;
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      .faq-answer p {
+        margin-bottom: 0.75rem;
+      }
+
+      .faq-answer p:last-child {
+        margin-bottom: 0;
+      }
+
+      .faq-answer ul {
+        margin-left: 1.25rem;
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .faq-answer li {
+        margin-bottom: 0.25rem;
+      }
+
+      /* Footer */
+      footer {
+        width: 100%;
+        max-width: 1000px;
+        margin: auto auto 0;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        z-index: 10;
+        position: relative;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .footer-links a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .footer-links a:hover {
+        color: #c084fc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <!-- Header Navigation -->
+    <header>
+      <a href="/" class="logo-container" id="nav-logo">
+        <div class="logo-icon">D</div>
+        <div class="logo-text">Dvy</div>
+      </a>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+      <div class="card" id="support-card">
+        <h1>Dvy Help & Support</h1>
+        <p class="subtitle">Find quick answers below or get in touch with our support team.</p>
+
+        <!-- Support CTA Section -->
+        <div class="support-cta" id="contact-section">
+          <div class="support-cta-title">Need direct assistance?</div>
+          <div class="support-cta-desc">
+            Have questions about billing calculations, camera scanning, or encountered an issue in the app? We're here to help!
+          </div>
+          <a class="btn-support" id="email-support-btn" href="mailto:wafflewidgets@gmail.com?subject=Dvy%20App%20Support%20Request&body=Please%20describe%20your%20issue%20or%20question%20here.%20(Optional:%20Include%20your%20device%20model%20and%20OS%20version)%0A%0ADetails:">
+            <!-- Mail SVG -->
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+              <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            Contact Support
+          </a>
+        </div>
+
+        <h2>Frequently Asked Questions</h2>
+        
+        <div class="faq-group" id="faq-accordions">
+          <details>
+            <summary>How does the AI receipt scanning work?</summary>
+            <div class="faq-answer">
+              <p>Dvy uses advanced on-device Text Recognition (OCR) combined with Google Gemini AI to analyze your receipt images.</p>
+              <p>The app processes the text locally, then safely submits the text structure to Gemini to automatically extract item descriptions, prices, quantities, subtotal, tax, and tips. No human reviews your images.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary>Can I use Dvy offline?</summary>
+            <div class="faq-answer">
+              <p>Yes! Dvy works fully offline. You can create receipts, assign items, and edit details while disconnected. All changes are stored locally in the on-device database.</p>
+              <p>Once you are back online, your local edits will automatically synchronize with your groups and friend sessions stored securely in the cloud.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary>How are tax and tip percentages split?</summary>
+            <div class="faq-answer">
+              <p>Tax and tip are split proportionally based on the individual items assigned to each participant. If you assign a specific item to yourself, you pay your relative portion of the total tax and tip.</p>
+              <p>Dvy also supports even distributions if the group prefers to split those fees flat across all participants.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary>What is the difference between App Friends and Manual Contacts?</summary>
+            <div class="faq-answer">
+              <p><strong>App Friends</strong> are registered Dvy users added using their email, friend code, or QR code. You can invite App Friends to live, collaborative bill sessions where everyone can assign items simultaneously in real-time.</p>
+              <p><strong>Manual Contacts</strong> are offline-only, local profiles created on your device. Use them to keep track of shares for friends who don't have the Dvy app installed yet.</p>
+            </div>
+          </details>
+
+          <details>
+            <summary>How do I delete my account?</summary>
+            <div class="faq-answer">
+              <p>You can delete your account at any time:</p>
+              <ul>
+                <li><strong>In the app:</strong> Go to <strong>Profile &gt; Settings &gt; Delete My Account</strong>. This will instantly delete your auth profile, user records, and cloud sessions.</li>
+                <li><strong>Via email:</strong> If you've already uninstalled the app, navigate to our <a href="dvy-delete.html">Account Deletion page</a> to send us a deletion request email.</li>
+              </ul>
+            </div>
+          </details>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="dvy-delete.html">Account Deletion</a>
+      </div>
+      <p>&copy; 2026 Waffle Widgets. Dvy, the Dvy logo, and check splits are trademarks of Waffle Widgets.</p>
+    </footer>
+  </body>
+</html>
