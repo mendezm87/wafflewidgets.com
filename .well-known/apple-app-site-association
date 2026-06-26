@@ -1,0 +1,16 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "957HJK2F5G.com.wafflewidgets.dvy.iosApp",
+        "paths": [
+          "/join*",
+          "/addfriend*",
+          "/addFriend*",
+          "/verify*"
+        ]
+      }
+    ]
+  }
+}
