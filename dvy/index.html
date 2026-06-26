@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dvy | Scan receipts, split bills, keep friends</title>
+    <meta name="description" content="Dvy is the ultimate group expense sharing and receipt scanning app. Scan checks with AI, split items, and settle up easily with friends.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+      :root {
+        --bg-color: #080c14;
+        --card-bg: rgba(17, 24, 39, 0.55);
+        --text-primary: #f3f4f6;
+        --text-secondary: #9ca3af;
+        --primary-glow: #8b5cf6;
+        --secondary-glow: #3b82f6;
+        --accent-glow: #d946ef;
+        --font-title: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background-color: var(--bg-color);
+        color: var(--text-primary);
+        font-family: var(--font-body);
+        min-height: 100vh;
+        overflow-x: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+
+      /* Animated Glowing Background Blobs */
+      .blob {
+        position: absolute;
+        width: 500px;
+        height: 500px;
+        border-radius: 50%;
+        filter: blur(130px);
+        z-index: 0;
+        opacity: 0.18;
+        pointer-events: none;
+        animation: float 25s infinite alternate ease-in-out;
+      }
+
+      .blob-1 {
+        background: radial-gradient(circle, var(--primary-glow) 0%, var(--secondary-glow) 100%);
+        top: -10%;
+        left: -10%;
+      }
+
+      .blob-2 {
+        background: radial-gradient(circle, var(--accent-glow) 0%, var(--primary-glow) 100%);
+        bottom: -10%;
+        right: -10%;
+        animation-delay: -7s;
+      }
+
+      @keyframes float {
+        0% { transform: translate(0, 0) scale(1); }
+        50% { transform: translate(60px, 40px) scale(1.15); }
+        100% { transform: translate(-40px, -60px) scale(0.9); }
+      }
+
+      /* Navigation Header */
+      header {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        z-index: 10;
+        position: relative;
+      }
+
+      .logo-container {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+      }
+
+      .logo-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--primary-glow) 0%, var(--secondary-glow) 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-title);
+        font-weight: 800;
+        font-size: 1.5rem;
+        color: white;
+        box-shadow: 0 8px 16px rgba(139, 92, 246, 0.3);
+      }
+
+      .logo-text {
+        font-family: var(--font-title);
+        font-weight: 700;
+        font-size: 1.75rem;
+        letter-spacing: -0.05em;
+        background: linear-gradient(135deg, #ffffff 0%, #d1d5db 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      /* Main Container */
+      main {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem 1.5rem;
+        z-index: 10;
+        position: relative;
+      }
+
+      /* Glassmorphic Landing Cards */
+      .card {
+        background: var(--card-bg);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 28px;
+        padding: 3rem 2.5rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        text-align: center;
+        max-width: 540px;
+        width: 100%;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+      }
+
+      .card:hover {
+        border-color: rgba(139, 92, 246, 0.35);
+        transform: translateY(-4px);
+      }
+
+      /* Headings & Texts */
+      h1 {
+        font-family: var(--font-title);
+        font-weight: 800;
+        font-size: 2.25rem;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+        letter-spacing: -0.02em;
+        background: linear-gradient(to right, #ffffff, #e5e7eb);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .subtitle {
+        color: var(--text-secondary);
+        font-size: 1.05rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+      }
+
+      /* Custom Dynamic Badge container */
+      .badge-container {
+        display: inline-block;
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.2);
+        color: #c084fc;
+        padding: 0.5rem 1.25rem;
+        border-radius: 9999px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 1.5rem;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      /* Invite Code Highlight Box */
+      .highlight-box {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 18px;
+        padding: 1.5rem;
+        margin: 1.5rem 0 2rem;
+      }
+
+      .highlight-label {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5rem;
+      }
+
+      .highlight-value {
+        font-family: var(--font-title);
+        font-weight: 800;
+        font-size: 2.5rem;
+        color: #ffffff;
+        letter-spacing: 0.1em;
+        background: linear-gradient(135deg, #a78bfa 0%, #818cf8 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 0 4px 12px rgba(167, 139, 250, 0.15);
+      }
+
+      /* Dynamic Helper QR Code on Desktop */
+      .qr-wrapper {
+        margin: 2rem 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+      }
+
+      .qr-image {
+        width: 180px;
+        height: 180px;
+        background: white;
+        padding: 0.75rem;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      .qr-caption {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        max-width: 280px;
+      }
+
+      /* Button Groups */
+      .store-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+
+      @media (min-width: 480px) {
+        .store-buttons {
+          flex-direction: row;
+          justify-content: center;
+        }
+      }
+
+      .store-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 0.85rem 1.75rem;
+        border-radius: 14px;
+        text-decoration: none;
+        color: white;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+      }
+
+      .btn-playstore {
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .btn-playstore:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+
+      .btn-appstore {
+        background: linear-gradient(135deg, var(--primary-glow) 0%, var(--secondary-glow) 100%);
+        border: none;
+        box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
+      }
+
+      .btn-appstore:hover {
+        box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        transform: translateY(-2px);
+      }
+
+      /* Features section for general visitors (homepage /) */
+      .features-grid {
+        display: none;
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        max-width: 1000px;
+        width: 100%;
+        margin-top: 3rem;
+        z-index: 10;
+        position: relative;
+      }
+
+      @media (min-width: 768px) {
+        .features-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .card-home {
+          max-width: 1000px !important;
+          margin-bottom: 2rem;
+        }
+      }
+
+      .feature-card {
+        background: rgba(17, 24, 39, 0.45);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 2rem;
+        text-align: left;
+        transition: all 0.3s ease;
+      }
+
+      .feature-card:hover {
+        border-color: rgba(139, 92, 246, 0.2);
+        transform: translateY(-4px);
+        background: rgba(17, 24, 39, 0.55);
+      }
+
+      .feature-icon {
+        width: 42px;
+        height: 42px;
+        background: rgba(139, 92, 246, 0.15);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.25rem;
+        color: #a78bfa;
+      }
+
+      .feature-title {
+        font-family: var(--font-title);
+        font-weight: 600;
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        color: white;
+      }
+
+      .feature-desc {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        line-height: 1.5;
+      }
+
+      /* Footer */
+      footer {
+        width: 100%;
+        max-width: 1200px;
+        margin: auto auto 0;
+        padding: 2rem 1.5rem;
+        text-align: center;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        z-index: 10;
+        position: relative;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .footer-links {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .footer-links a {
+        color: var(--text-secondary);
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .footer-links a:hover {
+        color: #c084fc;
+      }
+
+      /* Redirection Screen Overlay */
+      .redirect-overlay {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: var(--bg-color);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 2rem;
+      }
+
+      .redirect-logo {
+        margin-bottom: 2.5rem;
+      }
+
+      .spinner {
+        width: 48px;
+        height: 48px;
+        border: 3.5px solid rgba(139, 92, 246, 0.1);
+        border-top: 3.5px solid var(--primary-glow);
+        border-radius: 50%;
+        animation: spin 1s cubic-bezier(0.53, 0.21, 0.29, 0.67) infinite;
+        margin-bottom: 2rem;
+      }
+
+      .redirect-title {
+        font-family: var(--font-title);
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: #ffffff;
+        margin-bottom: 0.75rem;
+        text-align: center;
+      }
+
+      .redirect-sub {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        margin-bottom: 2.5rem;
+        text-align: center;
+      }
+
+      .redirect-manual-btn {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #ffffff;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+      }
+
+      .redirect-manual-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+
+    <!-- Redirection Overlay for mobile platforms -->
+    <div id="redirect-screen" class="redirect-overlay">
+      <div class="logo-container redirect-logo">
+        <div class="logo-icon">D</div>
+        <div class="logo-text">Dvy</div>
+      </div>
+      <div class="spinner"></div>
+      <div id="redirect-status" class="redirect-title">Opening the App Store...</div>
+      <div class="redirect-sub">You will be redirected shortly. If nothing happens, click below.</div>
+      <a id="redirect-manual-link" class="redirect-manual-btn" href="#">Continue manually</a>
+    </div>
+
+    <!-- Header Navigation -->
+    <header>
+      <a href="/" class="logo-container">
+        <div class="logo-icon">D</div>
+        <div class="logo-text">Dvy</div>
+      </a>
+    </header>
+
+    <!-- Main Content Area -->
+    <main>
+      <!-- Standard Landing Card / Dynamic Content Container -->
+      <div class="card" id="main-card">
+        <div class="badge-container" id="card-badge">Welcome to Dvy</div>
+        <h1 id="card-title">Scan Receipts. Split Bills. Keep Friends.</h1>
+        <p class="subtitle" id="card-subtitle">
+          The cleanest way to scan check receipts and share expenses among friends or groups instantly.
+        </p>
+
+        <!-- Container for Invitation/Verify Details (Visible only for join/friend codes) -->
+        <div id="action-details" style="display: none;">
+          <div class="highlight-box">
+            <div class="highlight-label" id="action-label">Code</div>
+            <div class="highlight-value" id="action-value">------</div>
+          </div>
+        </div>
+
+        <!-- Desktop QR Helper (Visible only on desktop when code/invite parameters exist) -->
+        <div id="qr-helper" class="qr-wrapper" style="display: none;">
+          <img id="qr-code-img" class="qr-image" src="" alt="QR Code Link">
+          <div class="qr-caption" id="qr-caption-text">Scan this QR code with your mobile device's camera to join or add friend directly.</div>
+        </div>
+
+        <!-- Store download badges -->
+        <div class="store-buttons" id="store-buttons-list">
+          <a class="store-btn btn-appstore" id="appstore-link" href="https://apps.apple.com/app/dvy-split-bills-receipts/id6780723161">
+            <!-- Apple Store Logo SVG -->
+            <svg width="20" height="24" viewBox="0 0 20 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16.4 12.87c.04-3.15 2.6-4.66 2.73-4.74-1.48-2.14-3.79-2.43-4.63-2.49-2-.2-3.92 1.17-4.93 1.17-1.02 0-2.6-1.15-4.27-1.12-2.19.03-4.22 1.26-5.34 3.2-2.27 3.91-.58 9.68 1.62 12.8 1.08 1.53 2.34 3.23 4.02 3.17 1.62-.07 2.24-1.04 4.2-1.04 1.95 0 2.52 1.04 4.2 1.01 1.71-.03 2.82-1.55 3.89-3.09 1.24-1.78 1.75-3.5 1.77-3.59-.04-.01-3.41-1.29-3.41-5.3M13.62 3.12c.9-1.08 1.5-2.58 1.34-4.07-1.29.05-2.85.85-3.77 1.91-.82.94-1.54 2.47-1.35 3.93 1.44.11 2.9-.69 3.78-1.77" />
+            </svg>
+            App Store
+          </a>
+          <a class="store-btn btn-playstore" id="playstore-link" href="https://play.google.com/store/apps/details?id=com.wafflewidgets.dvy">
+            <!-- Google Play Logo SVG -->
+            <svg width="20" height="22" viewBox="0 0 24 26" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 0.28C2.68 0.58 2.5 1.08 2.5 1.77v22.46c0 .69.18 1.19.5 1.49l.07.07L16.2 12.98v-.2L3.07 0.21l-.07.07zm14.17 12.44 3.51-3.51c.97-.55 1.62-.05 1.62 1.07v5.42c0 1.12-.65 1.62-1.62 1.07l-3.51-3.51v-.54zM15.4 12.18 3.78 1.25l11.62 10.93zm0 .64L3.78 24.75l11.62-10.93z" opacity="0.8"/>
+            </svg>
+            Google Play
+          </a>
+        </div>
+      </div>
+
+      <!-- Feature grid for generic landing page users (rendered only on / home) -->
+      <div class="features-grid" id="features-section">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <!-- Scan SVG -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+          </div>
+          <div class="feature-title">AI Receipt Scanning</div>
+          <div class="feature-desc">Snap a picture of any checkout receipt. Our on-device text recognition instantly identifies all items, tax, and tip.</div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <!-- Split SVG -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <div class="feature-title">Smart Splitting</div>
+          <div class="feature-desc">Split items evenly, by custom percentages, or assign specific counts to each participant. Proportional tax & tip calculation.</div>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <!-- Cloud SVG -->
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path>
+            </svg>
+          </div>
+          <div class="feature-title">Real-Time Sync</div>
+          <div class="feature-desc">Invite friends to your session. Everyone can see, select, and assign items in real-time. Works fully offline and syncs when online.</div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/support.html">Support</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/dvy-delete.html">Account Deletion</a>
+      </div>
+      <p>&copy; 2026 Waffle Widgets. Dvy, the Dvy logo, and check splits are trademarks of Waffle Widgets.</p>
+    </footer>
+
+    <!-- Redirection and Dynamic content scripting -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        const isAndroid = /android/i.test(userAgent);
+        const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+        
+        // Detect paths and parameters
+        const pathname = window.location.pathname.toLowerCase();
+        const searchParams = new URLSearchParams(window.location.search);
+        const code = searchParams.get("code");
+        const data = searchParams.get("data");
+        const currentUrl = window.location.href;
+
+        // Configuration
+        const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.wafflewidgets.dvy";
+        const APP_STORE_URL = "https://apps.apple.com/app/dvy-split-bills-receipts/id6780723161";
+
+        // Element targets
+        const redirectScreen = document.getElementById("redirect-screen");
+        const redirectStatus = document.getElementById("redirect-status");
+        const redirectManualLink = document.getElementById("redirect-manual-link");
+        
+        const cardBadge = document.getElementById("card-badge");
+        const cardTitle = document.getElementById("card-title");
+        const cardSubtitle = document.getElementById("card-subtitle");
+        const actionDetails = document.getElementById("action-details");
+        const actionLabel = document.getElementById("action-label");
+        const actionValue = document.getElementById("action-value");
+        const qrHelper = document.getElementById("qr-helper");
+        const qrCodeImg = document.getElementById("qr-code-img");
+        const featuresSection = document.getElementById("features-section");
+        const mainCard = document.getElementById("main-card");
+
+        let isActionRoute = false;
+        let redirectTarget = null;
+        let platformName = "";
+
+        // Determine route context
+        if (pathname.includes("/join") && code) {
+          isActionRoute = true;
+          cardBadge.textContent = "Bill Share Invitation";
+          cardTitle.textContent = "You've been invited to split a bill!";
+          cardSubtitle.textContent = "To view this bill and calculate your share, open Dvy on your phone or install the app using the options below.";
+          
+          actionLabel.textContent = "Join Session Code";
+          actionValue.textContent = code;
+          actionDetails.style.display = "block";
+        } 
+        else if (pathname.includes("/addfriend") && data) {
+          isActionRoute = true;
+          cardBadge.textContent = "Friend Request";
+          cardTitle.textContent = "Add a friend on Dvy";
+          cardSubtitle.textContent = "You can add this contact to your Dvy friends list by scanning the code or installing the app.";
+          
+          actionLabel.textContent = "Add Contact Info";
+          actionValue.textContent = data.substring(0, 12) + "...";
+          actionDetails.style.display = "block";
+        } 
+        else if (pathname.includes("/verify")) {
+          isActionRoute = true;
+          cardBadge.textContent = "Auth Center";
+          cardTitle.textContent = "Email Address Verified!";
+          cardSubtitle.textContent = "Your email has been verified. You can now close this window and proceed to log in to the Dvy mobile application.";
+        } 
+        else {
+          // General homepage layout
+          featuresSection.style.display = "grid";
+          mainCard.classList.add("card-home");
+        }
+
+        // Perform automatic mobile store redirection for action routes (join, addFriend, verify)
+        if (isActionRoute && (isAndroid || isIOS)) {
+          if (isAndroid) {
+            redirectTarget = PLAY_STORE_URL;
+            platformName = "Google Play Store";
+          } else if (isIOS) {
+            redirectTarget = APP_STORE_URL;
+            platformName = "Apple App Store";
+          }
+
+          if (redirectTarget) {
+            // Configure Manual links
+            redirectManualLink.href = redirectTarget;
+            redirectStatus.textContent = "Opening " + platformName + "...";
+            
+            // Show the redirection overlay
+            redirectScreen.style.display = "flex";
+
+            // Trigger redirect after a 1.5s delay to make transition feel smooth and not jarring
+            setTimeout(function() {
+              window.location.href = redirectTarget;
+            }, 1500);
+          }
+        } 
+        else if (isActionRoute && !isAndroid && !isIOS) {
+          // If on Desktop and it is an action invitation route, render helper QR code of current URL
+          // This allows the user to scan their desktop screen with their phone to carry over the deep link session.
+          const qrDataUrl = "https://api.qrserver.com/v1/create-qr-code/?size=180x180&color=080c14&data=" + encodeURIComponent(currentUrl);
+          qrCodeImg.src = qrDataUrl;
+          qrHelper.style.display = "flex";
+        }
+      });
+    </script>
+  </body>
+</html>
